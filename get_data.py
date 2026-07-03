@@ -1,26 +1,27 @@
+import time
+
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 
 # 1. Fetch the data
-url = "https://api.coingecko.com/api/v3/coins/usd-coin/market_chart?vs_currency=usd&days=365&interval=daily"
-response = requests.get(url)
-data = response.json()
+def get_prices(coin_id, days=365):
+    url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart?vs_currency=usd&days={days}&interval=daily"
+    response = requests.get(url)
+    data = response.json()
 
-# 2. Build the dataframe
-df = pd.DataFrame(data["prices"], columns=["timestamp", "price"])
-df["date"] = pd.to_datetime(df["timestamp"], unit="ms")
+    #build the dataframe from data["prices"]
+    df = pd.DataFrame(data["prices"], columns=["timestamp", "price"])
+    df["date"] = pd.to_datetime(df["timestamp"], unit="ms")
 
-# 3. Sanity check
-print(df.head())
+    #deviation colum
+    df["deviation"] = df["price"] - 1.0
+    return df
 
-# 4. Deviation from peg
-df["deviation"] = df["price"] - 1.0
+coins = ["usd-coin", "tether", "dai"]
 
-# 5. Plot
-plt.plot(df["date"], df["deviation"])
-plt.title("USDC deviation from $1 peg (past year)")
-plt.xlabel("Date")
-plt.ylabel("Deviation ($)")
-plt.axhline(0, color="gray", linestyle="--")  # reference line at perfect peg
-plt.show()
+for coin in coins:
+    df = get_prices(coin)
+    df.to_csv(f"data/{coin}.csv", index=False)
+    print(f"Saved {coin}: {len(df)} rows")
+    time.sleep(2)
