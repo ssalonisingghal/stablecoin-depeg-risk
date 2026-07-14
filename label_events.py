@@ -25,5 +25,9 @@ for name in coins:
     # robustness definition A: fixed -50bps
     df["event_fixed"] = (df["deviation"] < -0.005).astype(int)
 
+    df["episode_id"] = (
+        (df["event"] == 1) & (df["event"].shift(1, fill_value=0) == 0)
+    ).cumsum() * df["event"]
+    
     df.to_csv(f"data/{name}_labeled.csv", index=False)
     print(f"{name}: {df['event'].sum()} events (C), {df['event_fixed'].sum()} events (A)")
