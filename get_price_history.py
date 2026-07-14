@@ -31,7 +31,10 @@ def get_price_history(gecko_id, start_date="2021-01-01"):
 
     df = pd.DataFrame(all_prices)
     df["date"] = pd.to_datetime(df["timestamp"], unit="s")
-    df = df.drop_duplicates(subset="date").sort_values("date").reset_index(drop=True)
+    df["date"] = df["date"].dt.normalize()
+    df["abs_dev"] = (df["price"] - 1.0).abs()
+    df = df.sort_values("abs_dev").drop_duplicates(subset="date", keep="last")
+    df = df.drop(columns="abs_dev").sort_values("date").reset_index(drop=True)
     df["deviation"] = df["price"] - 1.0
     return df
 
