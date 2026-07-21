@@ -1,0 +1,5 @@
+Flows lead in slow-burn crises, lag in sudden ones. 3AC (rumor-driven, weeks-long) → all three coins led. UST (public overnight collapse) → lag. Onset speed governs whether warning is even possible.
+Flow signature is mechanism-specific. Fiat-backed → outflow. Crypto-backed → churn/mint-surge. Same crisis, different fingerprints across coins.
+The signal discriminates distress from noise. True crises scream in flows; benign flow-depegs stay quiet. That's what makes it modelable rather than a mirror of price.
+Two crisis classes are flow-invisible ; contagion-inflow (DAI/SVB) and venue-scare (USDT/Binance) ; where supply rises during stress. Honest ceiling on the model.
+Feature implications, earned: signed daily flow is too weak; use absolute/rolling flow abnormality (catches churn) and multi-day cumulative flow (catches accelerating outflow, ignores isolated bars).
